@@ -2,12 +2,13 @@ const jwt = require('jsonwebtoken');
 
 function authJwt(req, res, next) {
   const authHeader = req.headers.authorization;
+  console.log('[DEBUG authJwt] method=%s url=%s headers=%o', req.method, req.originalUrl, req.headers);
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader || !/^Bearer\s+/i.test(authHeader)) {
     return res.status(401).json({ success: false, message: 'Token tidak ditemukan' });
   }
 
-  const token = authHeader.split(' ')[1];
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

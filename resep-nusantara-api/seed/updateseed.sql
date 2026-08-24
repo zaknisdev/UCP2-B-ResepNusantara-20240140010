@@ -1,0 +1,86 @@
+-- Fix Kategori & Region - Resep Nusantara API
+-- Jalankan ini SETELAH seed.sql (data sudah ada, ini hanya UPDATE)
+-- Menggunakan name sebagai key (pastikan name UNIQUE atau jalankan hati-hati jika ada duplikat)
+-- Kategori dirapikan jadi set yang konsisten:
+-- Kari/Gulai, Sup, Sate, Panggangan, Pepes, Sambal, Sayur/Tumisan,
+-- Salad, Nasi, Gorengan, Kue, Minuman, Bubur, Lauk/Semur, Mie
+ 
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Sumatra Barat' WHERE name = 'Rendang Daging';
+UPDATE recipes SET category = 'Sate', region = 'Sumatra Barat' WHERE name = 'Sate Padang';
+UPDATE recipes SET category = 'Sup', region = 'Jakarta' WHERE name = 'Soto Betawi';
+UPDATE recipes SET category = 'Sup', region = 'Jawa Timur' WHERE name = 'Soto Lamongan';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Yogyakarta' WHERE name = 'Gudeg Yogyakarta';
+UPDATE recipes SET category = 'Nasi', region = 'Jawa' WHERE name = 'Nasi Goreng Kampung';
+UPDATE recipes SET category = 'Mie', region = 'Aceh' WHERE name = 'Mie Aceh';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Sumatra Selatan' WHERE name = 'Pempek Palembang';
+UPDATE recipes SET category = 'Sup', region = 'Sulawesi Selatan' WHERE name = 'Coto Makassar';
+UPDATE recipes SET category = 'Sup', region = 'Jawa Timur' WHERE name = 'Rawon Surabaya';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Sumatra Barat' WHERE name = 'Gulai Ayam';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Aceh' WHERE name = 'Gulai Kambing';
+UPDATE recipes SET category = 'Sup', region = 'Jawa Barat' WHERE name = 'Sayur Asem';
+UPDATE recipes SET category = 'Sayur/Tumisan', region = 'Jawa Tengah' WHERE name = 'Sayur Lodeh';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Yogyakarta' WHERE name = 'Opor Ayam';
+UPDATE recipes SET category = 'Panggangan', region = 'Bali' WHERE name = 'Ayam Betutu';
+UPDATE recipes SET category = 'Panggangan', region = 'Nusa Tenggara Barat' WHERE name = 'Ayam Taliwang';
+UPDATE recipes SET category = 'Pepes', region = 'Jawa Barat' WHERE name = 'Pepes Ikan';
+UPDATE recipes SET category = 'Pepes', region = 'Jawa Barat' WHERE name = 'Pepes Tahu';
+UPDATE recipes SET category = 'Pepes', region = 'Jawa Timur' WHERE name = 'Botok Tempe';
+UPDATE recipes SET category = 'Sambal', region = 'Sumatra Barat' WHERE name = 'Balado Terong';
+UPDATE recipes SET category = 'Sambal', region = 'Sumatra Barat' WHERE name = 'Balado Ikan Teri';
+UPDATE recipes SET category = 'Sambal', region = 'Bali' WHERE name = 'Sambal Matah';
+UPDATE recipes SET category = 'Sambal', region = 'Jawa' WHERE name = 'Sambal Terasi';
+UPDATE recipes SET category = 'Sambal', region = 'Jawa' WHERE name = 'Sambal Bawang';
+UPDATE recipes SET category = 'Salad', region = 'Jawa Barat' WHERE name = 'Karedok';
+UPDATE recipes SET category = 'Salad', region = 'Jakarta' WHERE name = 'Gado-Gado';
+UPDATE recipes SET category = 'Salad', region = 'Jawa Timur' WHERE name = 'Pecel Madiun';
+UPDATE recipes SET category = 'Salad', region = 'Jawa Barat' WHERE name = 'Lotek';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jakarta' WHERE name = 'Ketoprak';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jawa Timur' WHERE name = 'Tahu Tek';
+UPDATE recipes SET category = 'Salad', region = 'Jawa Timur' WHERE name = 'Rujak Cingur';
+UPDATE recipes SET category = 'Salad', region = 'Jawa' WHERE name = 'Rujak Buah';
+UPDATE recipes SET category = 'Sup', region = 'Sumatra Selatan' WHERE name = 'Tekwan';
+UPDATE recipes SET category = 'Sup', region = 'Sumatra Selatan' WHERE name = 'Model Palembang';
+UPDATE recipes SET category = 'Sup', region = 'Nasional' WHERE name = 'Bakso Sapi';
+UPDATE recipes SET category = 'Gorengan', region = 'Jawa Barat' WHERE name = 'Batagor';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jawa Barat' WHERE name = 'Siomay Bandung';
+UPDATE recipes SET category = 'Nasi', region = 'Jawa Tengah' WHERE name = 'Nasi Liwet';
+UPDATE recipes SET category = 'Nasi', region = 'Jakarta' WHERE name = 'Nasi Uduk';
+UPDATE recipes SET category = 'Nasi', region = 'Sulawesi Utara' WHERE name = 'Nasi Kuning';
+UPDATE recipes SET category = 'Sup', region = 'Sumatra Barat' WHERE name = 'Lontong Sayur';
+UPDATE recipes SET category = 'Nasi', region = 'Nasional' WHERE name = 'Ketupat Sayur';
+UPDATE recipes SET category = 'Sayur/Tumisan', region = 'Nasional' WHERE name = 'Tumis Kangkung';
+UPDATE recipes SET category = 'Sayur/Tumisan', region = 'Nasional' WHERE name = 'Tumis Buncis';
+UPDATE recipes SET category = 'Sayur/Tumisan', region = 'Nasional' WHERE name = 'Tumis Tauge';
+UPDATE recipes SET category = 'Sayur/Tumisan', region = 'Nasional' WHERE name = 'Cap Cay';
+UPDATE recipes SET category = 'Sup', region = 'Jakarta' WHERE name = 'Sup Buntut';
+UPDATE recipes SET category = 'Sup', region = 'Jawa' WHERE name = 'Sup Kimlo';
+UPDATE recipes SET category = 'Sup', region = 'Nasional' WHERE name = 'Sup Ayam Jamur';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Aceh' WHERE name = 'Kari Ayam';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Aceh' WHERE name = 'Kari Kambing';
+UPDATE recipes SET category = 'Panggangan', region = 'Sulawesi Utara' WHERE name = 'Ikan Bakar Rica';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Sulawesi Utara' WHERE name = 'Ikan Woku Belanga';
+UPDATE recipes SET category = 'Kari/Gulai', region = 'Sulawesi Utara' WHERE name = 'Ayam Woku';
+UPDATE recipes SET category = 'Panggangan', region = 'Bali' WHERE name = 'Bebek Betutu';
+UPDATE recipes SET category = 'Gorengan', region = 'Jawa Timur' WHERE name = 'Bebek Goreng';
+UPDATE recipes SET category = 'Sup', region = 'Jawa Barat' WHERE name = 'Empal Gentong';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jawa Barat' WHERE name = 'Empal Gepuk';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jakarta' WHERE name = 'Semur Jengkol';
+UPDATE recipes SET category = 'Lauk/Semur', region = 'Jakarta' WHERE name = 'Semur Daging';
+UPDATE recipes SET category = 'Gorengan', region = 'Nasional' WHERE name = 'Perkedel Kentang';
+UPDATE recipes SET category = 'Gorengan', region = 'Sulawesi Utara' WHERE name = 'Perkedel Jagung';
+UPDATE recipes SET category = 'Gorengan', region = 'Nasional' WHERE name = 'Bakwan Sayur';
+UPDATE recipes SET category = 'Gorengan', region = 'Jawa Barat' WHERE name = 'Tahu Isi';
+UPDATE recipes SET category = 'Gorengan', region = 'Nasional' WHERE name = 'Risoles Sayur';
+UPDATE recipes SET category = 'Kue', region = 'Jawa' WHERE name = 'Klepon';
+UPDATE recipes SET category = 'Kue', region = 'Jawa Timur' WHERE name = 'Onde-Onde';
+UPDATE recipes SET category = 'Kue', region = 'Nasional' WHERE name = 'Kue Lapis';
+UPDATE recipes SET category = 'Kue', region = 'Jakarta' WHERE name = 'Kue Cucur';
+UPDATE recipes SET category = 'Kue', region = 'Jawa Barat' WHERE name = 'Serabi Bandung';
+UPDATE recipes SET category = 'Kue', region = 'Jawa Tengah' WHERE name = 'Getuk Lindri';
+UPDATE recipes SET category = 'Kue', region = 'Nasional' WHERE name = 'Dadar Gulung';
+UPDATE recipes SET category = 'Minuman', region = 'Nasional' WHERE name = 'Kolak Pisang';
+UPDATE recipes SET category = 'Minuman', region = 'Jawa Barat' WHERE name = 'Es Cendol';
+UPDATE recipes SET category = 'Minuman', region = 'Jawa Tengah' WHERE name = 'Wedang Ronde';
+UPDATE recipes SET category = 'Bubur', region = 'Sulawesi Utara' WHERE name = 'Bubur Manado';
+UPDATE recipes SET category = 'Bubur', region = 'Nasional' WHERE name = 'Bubur Ayam';
+UPDATE recipes SET category = 'Sup', region = 'Papua' WHERE name = 'Papeda Ikan Kuah Kuning';

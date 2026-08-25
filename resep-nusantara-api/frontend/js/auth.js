@@ -13,6 +13,10 @@
   const form = document.getElementById('login-form');
   const errorBox = document.getElementById('login-error');
   const submitBtn = document.getElementById('login-submit');
+  const passwordInput = document.getElementById('login-password');
+  const passwordToggle = document.getElementById('password-toggle');
+  const eyeIcon = passwordToggle.querySelector('.icon-eye');
+  const eyeOffIcon = passwordToggle.querySelector('.icon-eye-off');
 
   let mode = 'login';
 
@@ -72,6 +76,15 @@
     const btn = e.target.closest('.auth-toggle-btn');
     if (!btn) return;
     setMode(btn.dataset.mode);
+  });
+
+  passwordToggle.addEventListener('click', () => {
+    const isVisible = passwordInput.type === 'text';
+    passwordInput.type = isVisible ? 'password' : 'text';
+    eyeIcon.hidden = !isVisible;
+    eyeOffIcon.hidden = isVisible;
+    passwordToggle.setAttribute('aria-pressed', String(!isVisible));
+    passwordToggle.setAttribute('aria-label', isVisible ? 'Tampilkan password' : 'Sembunyikan password');
   });
 
   form.addEventListener('submit', async (e) => {

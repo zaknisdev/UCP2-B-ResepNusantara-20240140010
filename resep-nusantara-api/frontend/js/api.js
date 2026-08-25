@@ -88,6 +88,9 @@ async function apiRequest(path, { method = 'GET', body, auth = false, apiKey = f
 }
 
 const Api = {
+  register(name, email, password) {
+    return apiRequest('/auth/register', { method: 'POST', body: { name, email, password } });
+  },
   login(email, password) {
     return apiRequest('/auth/login', { method: 'POST', body: { email, password } });
   },

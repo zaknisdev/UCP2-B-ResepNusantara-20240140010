@@ -188,7 +188,32 @@ body[data-page='ingredients'] .nav-link.active {
   text-align: center;
   color: var(--neutral-muted);
   font-size: 0.9rem;
-  margin: 0 0 28px;
+  margin: 0 0 20px;
+}
+
+.auth-toggle {
+  display: flex;
+  background-color: var(--neutral-bg);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.auth-toggle-btn {
+  flex: 1;
+  padding: 9px 0;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--neutral-muted);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.auth-toggle-btn.active {
+  background-color: var(--neutral-surface);
+  color: var(--neutral-text);
+  box-shadow: var(--shadow);
 }
 
 .form-group {

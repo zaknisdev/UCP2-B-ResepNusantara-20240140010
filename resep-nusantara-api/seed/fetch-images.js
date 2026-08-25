@@ -7,7 +7,19 @@
 // OAuth pihak ketiga).
 //
 // Resumable: baris yang sudah punya image_url dilewati, jadi script ini
-// aman dijalankan berkali-kali / dilanjut kalau sempat berhenti.
+// aman dijalankan berkali-kali / dilanjut kalau sempat berhenti. Untuk
+// mengulang baris yang sudah terisi (mis. hasil sebelumnya ternyata tidak
+// relevan), kosongkan dulu image_url baris itu (lihat
+// seed/reset_flagged_images.js).
+//
+// Strategi relevansi (v2): setiap query mengambil beberapa kandidat
+// (per_page=5), lalu tiap kandidat diberi skor berdasarkan kecocokan kata
+// di alt_description/description/tags terhadap nama resep/bahan, dikurangi
+// kalau ada kata yang menandakan foto itu BUKAN makanan (potret orang,
+// bangunan, pemandangan, hewan hidup, dsb). Kalau tidak ada kandidat yang
+// cukup relevan (skor di bawah ambang), baris dibiarkan tanpa gambar
+// (frontend otomatis pakai fallback emoji) -- ini sengaja, karena gambar
+// yang salah/menyesatkan lebih buruk daripada tidak ada gambar sama sekali.
 //
 // Usage:
 //   node seed/fetch-images.js [--type=recipes|ingredients|all] [--limit=N] [--delay=ms] [--dry-run]
@@ -20,6 +32,23 @@ require('dotenv').config();
 const pool = require('../src/config/db');
 
 const ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+
+const NEGATIVE_KEYWORDS = [
+  'portrait', 'model', 'face', 'fashion', 'man', 'woman', 'men', 'women',
+  'people walking', 'street style', 'building', 'architecture', 'landscape',
+  'mountain', 'hill', 'sheep', 'goat', 'animal', 'livestock', 'farm animal',
+  'wall', 'graffiti', 'wedding', 'protest', 'crowd', 'skyline', 'city street',
+];
+
+const POSITIVE_KEYWORDS = [
+  'food', 'dish', 'cuisine', 'meal', 'soup', 'curry', 'sauce', 'sate',
+  'satay', 'rice', 'noodle', 'chicken', 'beef', 'goat meat', 'fish', 'spicy',
+  'indonesian', 'asian food', 'plate of food', 'bowl of', 'meat', 'vegetable',
+  'fried', 'grilled', 'sambal', 'spice', 'ingredient', 'cooking', 'recipe',
+  'street food', 'traditional food',
+];
+
+const ACCEPT_THRESHOLD = 2;
 
 function parseArgs() {
   const args = { type: 'all', limit: Infinity, delay: 4000, dryRun: false };
@@ -36,10 +65,32 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function searchImage(query) {
+function scoreCandidate(photo, nameWords) {
+  const text = [
+    photo.alt_description || '',
+    photo.description || '',
+    ...(photo.tags || []).map((t) => t.title || ''),
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  let score = 0;
+  for (const word of nameWords) {
+    if (word.length > 2 && text.includes(word)) score += 3;
+  }
+  for (const kw of POSITIVE_KEYWORDS) {
+    if (text.includes(kw)) score += 1;
+  }
+  for (const kw of NEGATIVE_KEYWORDS) {
+    if (text.includes(kw)) score -= 5;
+  }
+  return score;
+}
+
+async function searchCandidates(query) {
   const url = new URL('https://api.unsplash.com/search/photos');
   url.searchParams.set('query', query);
-  url.searchParams.set('per_page', '1');
+  url.searchParams.set('per_page', '5');
 
   const res = await fetch(url, {
     headers: { Authorization: `Client-ID ${ACCESS_KEY}` },
@@ -53,8 +104,32 @@ async function searchImage(query) {
   }
 
   const json = await res.json();
-  const first = json.results && json.results[0];
-  return first ? first.urls.small : null;
+  return json.results || [];
+}
+
+async function findBestImage(name, queries) {
+  const nameWords = name.toLowerCase().split(/\s+/);
+  let best = null;
+
+  for (const query of queries) {
+    const candidates = await searchCandidates(query);
+    for (const photo of candidates) {
+      const score = scoreCandidate(photo, nameWords);
+      if (!best || score > best.score) {
+        best = { score, url: photo.urls.small };
+      }
+    }
+    // Kandidat pertama sudah cukup relevan -> tidak perlu buang request lagi
+    // ke query fallback berikutnya (hemat kuota Unsplash).
+    if (best && best.score >= ACCEPT_THRESHOLD) {
+      return best;
+    }
+  }
+
+  if (best && best.score >= ACCEPT_THRESHOLD) {
+    return best;
+  }
+  return null;
 }
 
 async function fillTable({ table, nameColumn, queryPrefix, limit, delay, dryRun }) {
@@ -66,26 +141,21 @@ async function fillTable({ table, nameColumn, queryPrefix, limit, delay, dryRun 
   console.log(`[${table}] ${rows.length} baris belum punya gambar, memproses ${todo.length}...`);
 
   let filled = 0;
-  for (const row of todo) {
-    // Coba nama spesifik dulu ("Soto Betawi"), baru fallback ke query
-    // generik ("indonesian food") kalau tidak ada hasil sama sekali --
-    // supaya tiap baris tetap kebagian gambar yang relevan.
-    const candidates = [row.name, queryPrefix];
-    let imageUrl = null;
-    let rateLimited = false;
+  let skippedNoMatch = 0;
 
-    for (const query of candidates) {
-      try {
-        imageUrl = await searchImage(query);
-      } catch (err) {
-        if (err.message === 'RATE_LIMITED') {
-          rateLimited = true;
-          break;
-        }
-        console.error(`[${table}] #${row.id} "${row.name}" gagal (query "${query}"): ${err.message}`);
+  for (const row of todo) {
+    const queries = [row.name, `${queryPrefix} ${row.name}`];
+
+    let result = null;
+    let rateLimited = false;
+    try {
+      result = await findBestImage(row.name, queries);
+    } catch (err) {
+      if (err.message === 'RATE_LIMITED') {
+        rateLimited = true;
+      } else {
+        console.error(`[${table}] #${row.id} "${row.name}" gagal: ${err.message}`);
       }
-      if (imageUrl) break;
-      await sleep(delay);
     }
 
     if (rateLimited) {
@@ -93,20 +163,21 @@ async function fillTable({ table, nameColumn, queryPrefix, limit, delay, dryRun 
       break;
     }
 
-    if (imageUrl) {
+    if (result) {
       if (!dryRun) {
-        await pool.query(`UPDATE ${table} SET image_url = $1 WHERE id = $2`, [imageUrl, row.id]);
+        await pool.query(`UPDATE ${table} SET image_url = $1 WHERE id = $2`, [result.url, row.id]);
       }
       filled += 1;
-      console.log(`[${table}] #${row.id} "${row.name}" -> ${imageUrl}`);
+      console.log(`[${table}] #${row.id} "${row.name}" -> (skor ${result.score}) ${result.url}`);
     } else {
-      console.log(`[${table}] #${row.id} "${row.name}" -> tidak ada hasil sama sekali, dilewati`);
+      skippedNoMatch += 1;
+      console.log(`[${table}] #${row.id} "${row.name}" -> tidak ada kandidat cukup relevan, dilewati (fallback emoji)`);
     }
 
     await sleep(delay);
   }
 
-  console.log(`[${table}] Selesai. ${filled}/${todo.length} baris terisi gambar baru.`);
+  console.log(`[${table}] Selesai. ${filled}/${todo.length} terisi, ${skippedNoMatch} dilewati (tidak relevan/tidak ada hasil).`);
 }
 
 async function main() {
@@ -121,7 +192,7 @@ async function main() {
     await fillTable({
       table: 'recipes',
       nameColumn: 'name',
-      queryPrefix: 'indonesian food',
+      queryPrefix: 'traditional indonesian food',
       limit: args.limit,
       delay: args.delay,
       dryRun: args.dryRun,
@@ -132,7 +203,7 @@ async function main() {
     await fillTable({
       table: 'ingredients',
       nameColumn: 'name',
-      queryPrefix: 'indonesian spice ingredient',
+      queryPrefix: 'indonesian cooking spice ingredient',
       limit: args.limit,
       delay: args.delay,
       dryRun: args.dryRun,

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bumbu — Resep Nusantara</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="ingredients">
+  <nav class="navbar">
+    <span class="navbar-brand">Resep Nusantara</span>
+    <div class="navbar-links">
+      <a href="recipes.html" class="nav-link">Resep</a>
+      <a href="ingredients.html" class="nav-link active">Bumbu</a>
+    </div>
+    <span class="nav-user" id="nav-user-name"></span>
+    <button class="nav-logout" id="nav-logout">Logout</button>
+  </nav>
+
+  <main class="page-content">
+    <h1 class="page-heading">Daftar Bumbu</h1>
+
+    <section class="toolbar">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Cari nama bahan..." />
+      </div>
+    </section>
+
+    <section id="ingredient-list-container">
+      <div class="card-list" id="ingredient-list"></div>
+      <div class="state-box" id="ingredient-state" hidden></div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/ingredients.js"></script>
+</body>
+</html>

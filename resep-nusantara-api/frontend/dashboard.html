@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Resep Nusantara</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="dashboard">
+  <nav class="navbar">
+    <span class="navbar-brand">Resep Nusantara</span>
+    <div class="navbar-links">
+      <a href="recipes.html" class="nav-link">Resep</a>
+      <a href="ingredients.html" class="nav-link">Bumbu</a>
+    </div>
+    <span class="nav-user" id="nav-user-name"></span>
+    <button class="nav-logout" id="nav-logout">Logout</button>
+  </nav>
+
+  <main class="dashboard-main">
+    <h1 class="dashboard-title">Resep Nusantara</h1>
+    <p class="dashboard-subtitle">Pilih data yang ingin Anda jelajahi</p>
+
+    <div class="dashboard-cards">
+      <a href="recipes.html" class="dashboard-card card-a">
+        <span class="dashboard-card-icon">🍲</span>
+        <h2 class="dashboard-card-title">Lihat Resep</h2>
+        <p class="dashboard-card-desc">Jelajahi resep masakan tradisional Indonesia</p>
+      </a>
+      <a href="ingredients.html" class="dashboard-card card-b">
+        <span class="dashboard-card-icon">🌿</span>
+        <h2 class="dashboard-card-title">Lihat Bumbu</h2>
+        <p class="dashboard-card-desc">Jelajahi daftar master bahan/bumbu</p>
+      </a>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+</body>
+</html>

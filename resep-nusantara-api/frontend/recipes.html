@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resep — Resep Nusantara</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="recipes">
+  <nav class="navbar">
+    <span class="navbar-brand">Resep Nusantara</span>
+    <div class="navbar-links">
+      <a href="recipes.html" class="nav-link active">Resep</a>
+      <a href="ingredients.html" class="nav-link">Bumbu</a>
+    </div>
+    <span class="nav-user" id="nav-user-name"></span>
+    <button class="nav-logout" id="nav-logout">Logout</button>
+  </nav>
+
+  <main class="page-content">
+    <h1 class="page-heading">Daftar Resep</h1>
+
+    <section class="toolbar">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Cari nama resep..." />
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Tingkat Kesulitan</label>
+          <div class="chip-group" id="difficulty-chips">
+            <button type="button" class="chip active" data-value="">Semua</button>
+            <button type="button" class="chip" data-value="mudah">Mudah</button>
+            <button type="button" class="chip" data-value="sedang">Sedang</button>
+            <button type="button" class="chip" data-value="sulit">Sulit</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label for="region-select">Daerah</label>
+          <select id="region-select">
+            <option value="">Semua Daerah</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="category-select">Kategori</label>
+          <select id="category-select">
+            <option value="">Semua Kategori</option>
+          </select>
+        </div>
+
+        <div class="filter-group time-filter">
+          <label>Waktu Memasak</label>
+          <div class="range-slider">
+            <div class="range-track"></div>
+            <div class="range-track-fill" id="range-track-fill"></div>
+            <input type="range" id="time-min" min="0" max="180" value="0" />
+            <input type="range" id="time-max" min="0" max="180" value="180" />
+          </div>
+          <div class="range-values" id="range-values">0 - 180 menit</div>
+        </div>
+
+        <button type="button" class="reset-filters" id="reset-filters">Reset Filter</button>
+      </div>
+    </section>
+
+    <section id="recipe-list-container">
+      <div class="card-list" id="recipe-list"></div>
+      <div class="state-box" id="recipe-state" hidden></div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="recipe-modal" hidden>
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="modal-close">&times;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/recipes.js"></script>
+</body>
+</html>

@@ -34,6 +34,7 @@ CREATE TABLE recipes (
   cook_time_minutes INT,
   servings INT,
   description TEXT,
+  image_url TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -41,6 +42,7 @@ CREATE TABLE ingredients (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) UNIQUE NOT NULL,
   default_unit VARCHAR(50),
+  image_url TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

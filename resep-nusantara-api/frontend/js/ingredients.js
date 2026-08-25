@@ -42,6 +42,7 @@
       const card = document.createElement('article');
       card.className = 'card ingredient-card';
       card.innerHTML = `
+        ${thumbMarkup(ing.image_url, ing.name, '🌿')}
         <h3 class="card-title">${ing.name}</h3>
         <span class="ingredient-unit">Satuan default: ${ing.default_unit || '-'}</span>
       `;

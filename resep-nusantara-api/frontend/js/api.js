@@ -87,6 +87,16 @@ async function apiRequest(path, { method = 'GET', body, auth = false, apiKey = f
   return json;
 }
 
+// Markup thumbnail bergambar dengan fallback emoji kalau image_url kosong
+// atau gagal dimuat (mis. link Unsplash yang belum pernah diisi).
+function thumbMarkup(imageUrl, alt, fallbackEmoji) {
+  if (!imageUrl) {
+    return `<div class="card-thumb card-thumb-fallback">${fallbackEmoji}</div>`;
+  }
+  const safeAlt = String(alt).replace(/"/g, '&quot;');
+  return `<div class="card-thumb"><img src="${imageUrl}" alt="${safeAlt}" loading="lazy" onerror="this.closest('.card-thumb').outerHTML='<div class=\\'card-thumb card-thumb-fallback\\'>${fallbackEmoji}</div>'" /></div>`;
+}
+
 const Api = {
   register(name, email, password) {
     return apiRequest('/auth/register', { method: 'POST', body: { name, email, password } });

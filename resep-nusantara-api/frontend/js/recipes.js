@@ -139,6 +139,7 @@
       const card = document.createElement('article');
       card.className = 'card recipe-card';
       card.innerHTML = `
+        ${thumbMarkup(recipe.image_url, recipe.name, '🍲')}
         <h3 class="card-title">${recipe.name}</h3>
         <div class="card-meta-row">
           <span class="tag">${recipe.category}</span>
@@ -167,6 +168,7 @@
         .map(
           (ing) => `
           <li>
+            <span class="ing-thumb">${thumbMarkup(ing.ingredient_image_url, ing.ingredient_name, '🌿')}</span>
             <span class="ing-name">${ing.ingredient_name}</span>
             <span class="ing-qty">${ing.quantity} ${ing.unit || ing.default_unit || ''}${ing.notes ? ` · ${ing.notes}` : ''}</span>
           </li>`
@@ -174,6 +176,7 @@
         .join('');
 
       modalContent.innerHTML = `
+        ${thumbMarkup(recipe.image_url, recipe.name, '🍲').replace('card-thumb', 'card-thumb modal-thumb')}
         <h2 class="modal-title">${recipe.name}</h2>
         <div class="card-meta-row">
           <span class="tag">${recipe.category}</span>

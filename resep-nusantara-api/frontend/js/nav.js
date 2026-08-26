@@ -19,5 +19,20 @@
     if (userNameEl) {
       userNameEl.textContent = Session.getUserName() || '';
     }
+
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+    if (scrollTopBtn) {
+      scrollTopBtn.hidden = false;
+
+      const toggleVisibility = () => {
+        scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
+      };
+      toggleVisibility();
+      window.addEventListener('scroll', toggleVisibility);
+
+      scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   });
 })();

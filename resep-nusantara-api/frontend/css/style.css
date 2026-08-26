@@ -865,6 +865,48 @@ body[data-page='ingredients'] .spinner {
   margin-left: auto;
 }
 
+/* ---------- Tombol kembali ke atas ---------- */
+
+.scroll-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--color-a);
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 150;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top-btn:hover {
+  opacity: 0.9;
+}
+
+.scroll-top-btn[hidden] {
+  display: none;
+}
+
+body[data-page='ingredients'] .scroll-top-btn {
+  background-color: var(--color-b);
+}
+
 @media (max-width: 640px) {
   .navbar {
     padding: 12px 16px;
